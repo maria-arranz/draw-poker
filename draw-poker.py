@@ -179,10 +179,10 @@ def juego():
 
 
 def to_string_lista(lista):
-    string = str(lista[0])
+    string = str(lista[0]+1)
     for i in range(len(lista)-2):
-        string = string +", " + str(lista[i+1])
-    string = string + " y " + str(lista[len(lista)-1])
+        string = string +", " + str(lista[i+1]+1)
+    string = string + " y " + str(lista[len(lista)-1]+1)
     return string
 
 def to_string_ganador(ganadores):
