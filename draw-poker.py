@@ -94,3 +94,44 @@ def clasifica(mano):
     else :return (10,valores[0])
 
 # En conclusion se devuelve el tipo de mano y el primer criterio de desempate
+
+# La parte del juego que implemento es el showdown: donde se decide que mano es la mejor
+
+def showdown(valoraciones):
+    indices = [i for i,elem in enumerate(valoraciones) if elem[0] == min(list(map(lambda x: x[0],valoraciones)))]
+    #una vez tenemos los candidatos procedemos a intentar desempatar con el segundo argumento de salida de clasifica
+    candidatos = [valoraciones[i] for i in indices]
+    mejor = min(list(map(lambda x: ranking[x[1]],candidatos)))
+    mejores = [indices[i] for i,elem in enumerate(candidatos) if ranking[elem[1]] == mejor]
+    
+    return mejores
+
+#Aun así puede haber empate: hay que comparar el resto de las cartas
+#posibilidades de empate en esta modalidad de poker (tener en cuenta que en otras modalidades puede ser necesario añadir mas casos):
+# Flush, Pocket, One Pair, High Card
+def desempate(j1,j2, mano):
+    l1 = list(j1)
+    l2 = list(j2)
+    ordena(l1)
+    ordena(l2)
+    v1 = list(map(lambda x: x[0],l1))
+    v2 = list(map(lambda x: x[0],l2))
+    if(v1 == v2): return 0
+    if (mano == 5 or mano == 10 or mano == 9): #en estos casos se mira cual es el que tiene la carta mas alta
+        if any(v1[i] > v2[i] for i in range(5)): return -1
+        else: return 1
+    if (mano == 8): #en este caso en primer lugar se mira la segunda pareja y a continuacion, si es necesario la carta restante
+        l1 = list(map (lambda x: valores.count(x), v1)).reverse
+        l2 = list(map (lambda x: valores.count(x), v2)).reverse
+        ind1 = 12 - l1.index(2)
+        ind2 = 12 - l2.index(2)
+        if (values[ind1] == values[ind2]):
+            ind1 = 12 - l1.index(1)
+            ind2 = 12 - l2.index(1)
+        if(values[ind1] > values[ind2]):
+            return -1
+        else:
+            return 1
+
+#ESTO ESTA MAL -> FIJATE: que no has definido valores en ningun sition
+
