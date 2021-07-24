@@ -135,3 +135,83 @@ def desempate(j1,j2, mano):
 
 #ESTO ESTA MAL -> FIJATE: que no has definido valores en ningun sition
 
+def reparto(baraja, descarte,n):
+    rep =[]
+    for i in range(n):
+        rep.append(set())
+    for i in range(5):
+        for j in range(n):
+            if len(baraja) == 0:
+                baraja = baraja + descarte
+                random.shuffle(baraja)
+                descarte.clear()
+            rep[j].add(baraja[0])
+            baraja.pop(0)
+    return rep
+
+def juego():
+    mi_baraja = baraja()
+    descarte = []
+    n = int(input("jugadores:"))
+    play = True
+    while(play):
+        rep = reparto(mi_baraja,descarte,n)
+        print(to_string_reparto(rep))
+        valoraciones = list(map(clasifica, rep))
+        print(to_string_valoracion(valoraciones))
+        mejor = showdown(valoraciones)
+        aux = []
+        while(len(mejor)> 1):
+        ## solo es posible el empate entre un maximo de 4 jugadores con una sola baraja
+        #iremos comparando los elementos con el primero de manera que podamos mantener control de los mejores
+            factor = desempate(rep[mejor[0]], rep[mejor[1]],valoraciones[mejor[0]][0])
+            if factor == 0:
+                aux.append(mejor[1])
+                mejor.remove(1)
+            elif factor == -1:
+                mejor.remove(1)
+            else:
+                aux.clear()
+                mejor.remove(0)
+        ganadores = mejor+aux
+        print(to_string_ganador(ganadores))
+
+        #REVISAR QUE SE HAGA BIEN, no me fio
+        descarte = descarte + [x for lista in list(map(lambda x: list(x), rep)) for x in lista]
+        a = (input("seguir (Y/N): "))
+        if(a=="N"):
+            play = False
+        else: continue
+
+
+def to_string_lista(lista):
+    string = str(lista[0])
+    for i in range(len(lista)-2):
+        string = string +", " + str(lista[i+1])
+    string = string + " y " + str(lista[len(lista)-1])
+    return string
+
+def to_string_ganador(ganadores):
+    if len(ganadores) == 1:
+        return "El ganador es el jugador: " + str(ganadores[0]+ 1) + ". Enhorabuena!"
+    else: return "Ha habido un empate entre los jugadores "+ to_string_lista(ganadores)
+
+def to_string_mano(conjunto):
+    string = ""
+    for elem in conjunto:
+        string = string + "|" +elem[0]+ " " + elem[1] + "|"
+    return string
+
+def to_string_reparto(reparto):
+    string = ""
+    for i in range(len(reparto)):
+        string = string + "Jugador " + str(i+1) + ":\n" + to_string_mano(reparto[i]) + "\n"
+    return string
+
+def to_string_valoracion(valoracion):
+    string = ""
+    for i in range(len(valoracion)):
+        string = string + "Jugador " + str(i+1) + ": " + manos[valoracion[i][0]] + ", " + str(valoracion[i][1]) + "\n"
+    return string
+
+juego()
