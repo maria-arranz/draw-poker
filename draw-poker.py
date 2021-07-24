@@ -121,10 +121,11 @@ def desempate(j1,j2, mano):
         if any(v1[i] > v2[i] for i in range(5)): return -1
         else: return 1
     if (mano == 8): #en este caso en primer lugar se mira la segunda pareja y a continuacion, si es necesario la carta restante
-        l1 = list(map (lambda x: valores.count(x), v1)).reverse
-        l2 = list(map (lambda x: valores.count(x), v2)).reverse
+        l1 = list(map (lambda x: v1.count(x), values)).reverse
+        l2 = list(map (lambda x: v2.count(x), values)).reverse
         ind1 = 12 - l1.index(2)
         ind2 = 12 - l2.index(2)
+        #Buscamos la diferencia entre las dos manos (ya que sabemos que no son iguales)
         if (values[ind1] == values[ind2]):
             ind1 = 12 - l1.index(1)
             ind2 = 12 - l2.index(1)
@@ -132,8 +133,6 @@ def desempate(j1,j2, mano):
             return -1
         else:
             return 1
-
-#ESTO ESTA MAL -> FIJATE: que no has definido valores en ningun sition
 
 def reparto(baraja, descarte,n):
     rep =[]
