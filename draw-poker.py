@@ -134,27 +134,22 @@ def desempate(j1,j2, mano):
         else:
             return 1
 
-def reparto(baraja, descarte,n):
+def reparto(baraja,n):
     rep =[]
     for i in range(n):
         rep.append(set())
     for i in range(5):
         for j in range(n):
-            if len(baraja) == 0:
-                baraja = baraja + descarte
-                random.shuffle(baraja)
-                descarte.clear()
             rep[j].add(baraja[0])
             baraja.pop(0)
     return rep
 
 def juego():
-    mi_baraja = baraja()
-    descarte = []
     n = int(input("jugadores:"))
     play = True
     while(play):
-        rep = reparto(mi_baraja,descarte,n)
+        mi_baraja = baraja()
+        rep = reparto(mi_baraja,n)
         print(to_string_reparto(rep))
         valoraciones = list(map(clasifica, rep))
         print(to_string_valoracion(valoraciones))
@@ -166,17 +161,17 @@ def juego():
             factor = desempate(rep[mejor[0]], rep[mejor[1]],valoraciones[mejor[0]][0])
             if factor == 0:
                 aux.append(mejor[1])
-                mejor.remove(1)
+                mejor.pop(1)
             elif factor == -1:
-                mejor.remove(1)
+                mejor.pop(1)
             else:
                 aux.clear()
-                mejor.remove(0)
+                mejor.pop(0)
         ganadores = mejor+aux
         print(to_string_ganador(ganadores))
 
-        #REVISAR QUE SE HAGA BIEN, no me fio
-        descarte = descarte + [x for lista in list(map(lambda x: list(x), rep)) for x in lista]
+        mi_baraja.clear()
+        
         a = (input("seguir (Y/N): "))
         if(a=="N"):
             play = False
@@ -212,5 +207,6 @@ def to_string_valoracion(valoracion):
     for i in range(len(valoracion)):
         string = string + "Jugador " + str(i+1) + ": " + manos[valoracion[i][0]] + ", " + str(valoracion[i][1]) + "\n"
     return string
+
 
 juego()
