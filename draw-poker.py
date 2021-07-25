@@ -121,14 +121,16 @@ def desempate(j1,j2, mano):
         if any(v1[i] > v2[i] for i in range(5)): return -1
         else: return 1
     if (mano == 8): #en este caso en primer lugar se mira la segunda pareja y a continuacion, si es necesario la carta restante
-        l1 = list(map (lambda x: v1.count(x), values)).reverse
-        l2 = list(map (lambda x: v2.count(x), values)).reverse
-        ind1 = 12 - l1.index(2)
-        ind2 = 12 - l2.index(2)
+        l1 = list(map (lambda x: v1.count(x), values))
+        l2 = list(map (lambda x: v2.count(x), values))
+        parejas1 = [i for i,elem in enumerate(l1) if elem == 2]
+        parejas2 = [i for i,elem in enumerate(l2) if elem == 2]
+        ind1 = parejas1[1]
+        ind2 = parejas2[1]
         #Buscamos la diferencia entre las dos manos (ya que sabemos que no son iguales)
         if (values[ind1] == values[ind2]):
-            ind1 = 12 - l1.index(1)
-            ind2 = 12 - l2.index(1)
+            ind1 = l1.index(1)
+            ind2 = l2.index(1)
         if(values[ind1] > values[ind2]):
             return -1
         else:
