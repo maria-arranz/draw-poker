@@ -146,8 +146,28 @@ def reparto(baraja,n):
             baraja.pop(0)
     return rep
 
+def input_jugadores():
+    while(True):
+        try:
+            n = int(input("\nNúmero de jugadores: "))
+            if(0 < n and 11 > n):
+                return n
+            else:
+                print("Error, baraja insuficiente, introduzca un entero en [1,10]")
+        except:
+            print("Entrada incorrecta, introduzca un entero en [1,10]")
+
+
+def input_seguir():
+    while(True):
+        a = (input("\n¿Seguir? (Y/N): "))
+        if a == "Y" or a == "y":
+            return True
+        elif a == "N" or a == "n":
+            return False
+
 def juego():
-    n = int(input("jugadores:"))
+    n = input_jugadores()
     play = True
     while(play):
         mi_baraja = baraja()
@@ -174,9 +194,9 @@ def juego():
 
         mi_baraja.clear()
         
-        a = (input("seguir (Y/N): "))
-        if(a=="N"):
+        if(not(input_seguir())):
             play = False
+            print("\nAdiós!\n")
         else: continue
 
 
@@ -199,7 +219,7 @@ def to_string_mano(conjunto):
     return string
 
 def to_string_reparto(reparto):
-    string = ""
+    string = "\n"
     for i in range(len(reparto)):
         string = string + "Jugador " + str(i+1) + ":\n" + to_string_mano(reparto[i]) + "\n"
     return string
